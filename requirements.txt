@@ -2,3 +2,5 @@ flask
 gunicorn
 vaderSentiment
 nltk
+waitress  # <== เพิ่มบรรทัดนี้
+flask-jwt-extended
