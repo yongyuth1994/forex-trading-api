@@ -1,7 +1,7 @@
 flask
 gunicorn
+waitress
 vaderSentiment
 nltk
-waitress  # <== เพิ่มบรรทัดนี้
 flask-jwt-extended
-flask_cors
+flask-cors
