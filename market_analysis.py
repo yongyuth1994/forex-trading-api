@@ -9,9 +9,10 @@ nltk.download('vader_lexicon')
 app = Flask(__name__)
 analyzer = SentimentIntensityAnalyzer()
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
     return jsonify({"message": "Forex Trading API is running!"})
+
 
 @app.route("/analyze", methods=["POST"])
 def analyze_news():
