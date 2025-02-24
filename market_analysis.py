@@ -2,12 +2,33 @@ import os
 from flask import Flask, jsonify, request, Response
 import json
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_cors import CORS
 import nltk
 
 nltk.download('vader_lexicon')
 
+app.config['JWT_SECRET_KEY'] = 'your-secret-key'
+jwt = JWTManager(app)
+
 app = Flask(__name__)
+CORS(app)  # อนุญาตทุกโดเมนเรียก API
 analyzer = SentimentIntensityAnalyzer()
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json.get("username")
+    password = request.json.get("password")
+    if username == "admin" and password == "password":  # ปรับเป็นระบบ auth จริง
+        token = create_access_token(identity=username)
+        return jsonify(access_token=token)
+    return jsonify({"msg": "Invalid credentials"}), 401
+
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user)
 
 @app.route("/", methods=["GET"])
 def home():
@@ -29,7 +50,8 @@ def analyze_news():
         sentiment = "Positive" if sentiment_score > 0.05 else "Negative" if sentiment_score < -0.05 else "Neutral"
         analyzed_news.append({"news": news, "sentiment": sentiment})
 
-    return jsonify(analyzed_news)
+    return jsonify({"results": analyzed_news})
+
 
 @app.route("/market-trend", methods=["GET"])
 def market_trend():

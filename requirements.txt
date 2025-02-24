@@ -4,3 +4,4 @@ vaderSentiment
 nltk
 waitress  # <== เพิ่มบรรทัดนี้
 flask-jwt-extended
+flask_cors
